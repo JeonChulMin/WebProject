@@ -153,7 +153,7 @@ JSP 파일에 스크립틀릿 <%= %> 를 사용하는 것보다 JSTL, EL을 사�
 
 
 
-## REFERENCES
+## References
 
 - https://daesuni.github.io/jstl/
 - https://victorydntmd.tistory.com/156
@@ -493,3 +493,97 @@ public static void close(Connection conn, PreparedStatement ps){
 
 
 
+- try()에서 선언한 객체들에 대해서 try 구문이 종료될 때 자동으로 선언한 객체를 close 해주는 기능이다.
+- Java7부터 지원한다.
+- try에서 선언된 객체가 AutoCloseable을 구현하였다면 Java는 try 구문이 종료될 때 자동으로 객체의 close() 메소드를 호출해준다.
+- 이전에는 finally에서 조건문에 해당 객체가 null 인지 아닌지 확인 후에 close()를 호출해주었지만 이 구문에서는 호출해줄 필요가 없다.
+- try with resources에서 자동으로 close()가 호출되는 것은 AutoCloseable을 구현한 객체에만 해당된다.
+- 만약 사용자 정의 클래스에서 try with resources 을 이용하고자 한다면 AutoCloseable 을 implements 해야 한다.
+
+
+
+### 장점
+
+- 코드를 간결하게 만들어 이해하기 쉽고 유지보수가 쉬워진다.
+
+- 또한 try-catch 구문을 이용한 close()를 호출할 필요가 없어 이와 관련된 실수를 줄일 수 있다.
+
+
+
+### 예
+
+#### 적용 전
+
+```java
+//try with resources, 알아서 close 해줌
+		try (Connection conn = DriverManager.getConnection(dburl, dbUser, dbpasswd);
+				PreparedStatement ps = conn.prepareStatement(sql)) {
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					String description = rs.getString(1)
+					int id = rs.getInt("role_id");
+					Role role = new Role(id, description);
+					list.add(role);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+```
+
+
+
+
+
+#### 적용 후
+
+```java
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+			String sql = "SELECT description, role_id FROM role WHERE role_id = ?";
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, roleId);
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				String description = rs.getString(1);
+				int id = rs.getInt("role_id");
+				role = new Role(id, description);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(rs != null) { 
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+```
+
+
+
+## References
+
+- https://codechacha.com/ko/java-try-with-resources/
