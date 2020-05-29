@@ -4,7 +4,7 @@
 
 ### [Maven](#maven이란)
 
-### [JDBC](#jdbc)
+### [JDBC](#jdbc란)
 
 # JSTL과 EL
 
@@ -236,11 +236,9 @@ Maven을 이용할 경우 얻게 되는 이점 중 하나는 Dependency Manageme
 
 
 
-
-
 ----
 
-# JDBC
+# JDBC란
 
 - JDBC(Java Database Connectivity)
 - 자바를 이용한 DB 접속과 SQL 문장 실행, 그리고 결과로 얻어진 데이터의 핸들링을 제공하는 방법과 절차에 관한 규약
