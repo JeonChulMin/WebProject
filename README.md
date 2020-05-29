@@ -6,7 +6,7 @@
 
 ### [JDBC](#jdbc란)
 
-### [try-with-resources](#try-with-resources)
+### [try-with-resources](#try-with-resources-구문)
 
 # JSTL과 EL
 
@@ -489,7 +489,7 @@ public static void close(Connection conn, PreparedStatement ps){
 
 ---
 
-# try with resources
+# try with resources 구문
 
 
 
