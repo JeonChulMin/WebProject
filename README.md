@@ -6,6 +6,8 @@
 
 ### [JDBC](#jdbc란)
 
+### [try-with-resources](#try-with-resources)
+
 # JSTL과 EL
 
 JSTL(JavaServer Pages Standard Tag Library)
@@ -236,6 +238,44 @@ Maven을 이용할 경우 얻게 되는 이점 중 하나는 Dependency Manageme
 
 
 
+## Maven 프로젝트 생성
+
+1. 이클립스에서 File에서 New를 선택
+2. Maven Project를 찾아서 클릭
+3. New Maven Project 창이 나오는데 Next 클릭
+
+<img src="images/maven_3.PNG" alt="maven_3" style="zoom: 60%;" />
+
+
+
+4.  그 다음 프로젝트 탬플릿인 Archetype을 선택해야 한다. 여기서는 Maven을 이용하여 웹 애플리케이션을 개발할 것이므로 아래 그림과 같이 `maven-archtype-webapp` 을 선택한 후 Next 클릭
+   -  :heavy_plus_sign: 어떤 아키타입을 선택하느냐에 따라 생성하는 파일이나 라이브러리가 다르다.
+
+![maven_1](images/maven_1.PNG)
+
+
+
+5. 프로젝트 이름 설정
+   - Group Id 는 보통 프로젝트의 도메인이나 회사의 이름을 거꾸로 적는다.
+   - Artifact Id 는 프로젝트 이름
+   - 버전은 보통 아래와 같이 설정하므로 따로 수정 x
+   - Package 이름은 Group Id와 Artifact Id가 조합된 이름이 된다.
+   - Finish를 누르면 프로젝트 생성
+
+![maven_2](images/maven_2.PNG)
+
+
+
+6. 추가로 필요한 폴더 추가
+   - 아래 그림은 프로잭트의 디렉터리 구조
+   - 빨간색 부분은 자동으로 생성되지 않아서 필요에 따라 만들어서 사용
+   - Maven으로 생성된 프로젝트의 경우 자바 소스는 src/main/java 폴더에 생성된다.
+   - 웹 애플리케이션과 관련된 HTML, CSS 등은 src/main/webapp 폴더에서 작성해야 한다.
+
+
+
+![maven_4](images/maven_4.PNG)
+
 ----
 
 # JDBC란
@@ -447,7 +487,9 @@ public static void close(Connection conn, PreparedStatement ps){
 
 
 
-## JDBC 실습
+---
+
+# try-with-resources
 
 
 

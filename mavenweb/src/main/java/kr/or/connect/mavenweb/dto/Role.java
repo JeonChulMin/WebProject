@@ -9,7 +9,6 @@ public class Role {
 	}
 
 	public Role(Integer roleId, String description) {
-		super();
 		this.roleId = roleId;
 		this.description = description;
 	}
