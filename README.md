@@ -489,7 +489,7 @@ public static void close(Connection conn, PreparedStatement ps){
 
 ---
 
-# try-with-resources
+# try with resources
 
 
 
