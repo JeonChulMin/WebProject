@@ -4,11 +4,7 @@
 
 ### [Maven](#maven이란)
 
-### [JDBC](#JDBC)
-
-
-
-
+### [JDBC](#jdbc)
 
 # JSTL과 EL
 
