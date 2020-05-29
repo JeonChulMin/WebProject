@@ -10,8 +10,6 @@
 
 
 
-
-
 # JSTL과 EL
 
 JSTL(JavaServer Pages Standard Tag Library)
