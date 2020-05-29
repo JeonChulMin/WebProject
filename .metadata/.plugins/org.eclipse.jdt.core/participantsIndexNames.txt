@@ -1,3 +1,5 @@
 INDEX VERSION 1.131
 C:\Users\samsung\WebProject\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\425032392.index
 \mavenweb\src\main\resources
+C:\Users\samsung\WebProject\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\214840090.index
+\jdbcexam\src\main\resources

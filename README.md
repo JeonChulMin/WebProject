@@ -4,7 +4,7 @@
 
 ### [Maven](#maven이란)
 
-### [JDBC](#jdbc)
+### [JDBC](#JDBC)
 
 
 
@@ -293,6 +293,8 @@ DriverManager :arrow_right: Connection :arrow_right: Statement :arrow_right: Res
 
 
 
+
+
 ## JDBC 단계별 설명
 
 1. import
@@ -307,15 +309,20 @@ import java.sql.*;
 Class.forName( "com.mysql.jdbc.Driver" );
 ```
 
+- 패키지명.클래스, 해당 객체가 메모리에 올라감, DB 벤더에 따라 이름 달라짐
+
 3. Connection 객체를 생성
 
 ```java
 String dburl  = "jdbc:mysql://localhost/dbName";
-
 Connection con =  DriverManager.getConnection ( dburl, ID, PWD );
 ```
 
-예)
+- DB에 접속, IP 혹은 URL, ID, PWD 입력해서 접속
+
+
+
+### 예 (oracle DB에 접속할 경우)
 
 ```java
 public static Connection getConnection() throws Exception{
@@ -334,7 +341,13 @@ public static Connection getConnection() throws Exception{
 4. Statement 객체를 생성 및 질의 수행
 
 ```java
+// Statement 생성
 Statement stmt = con.createStatement();
+
+// 질의 수행
+ResultSet rs = stmt.executeQuery("select no from user");
+
+// 참고
 stmt.execute(“query”);             //any SQL
 stmt.executeQuery(“query”);     //SELECT
 stmt.executeUpdate(“query”);   //INSERT, UPDATE, DELETE
@@ -343,12 +356,12 @@ stmt.executeUpdate(“query”);   //INSERT, UPDATE, DELETE
 5. SQL 문에 결과물이 있다면 ResultSet 객체를 생성하고 결과 받기
 
 ```java
-ResultSet rs = stmt.executeQuery("select no from user" );
-while ( rs.next() )
+ResultSet rs = stmt.executeQuery("select no from user");
+while (rs.next()) // false는 반환값이 없을 경우를 뜻함 
       System.out.println( rs.getInt( "no") );
 ```
 
-6. 모든 객체를 닫음
+6. 모든 객체를 닫음 (순차적으로 닫아줘야함)
 
 ```java
 rs.close();
@@ -358,7 +371,7 @@ con.close();
 
 
 
-예)
+### 예)
 
 ```java
 public List<GuestBookVO> getGuestBookList(){
@@ -433,7 +446,14 @@ public static void close(Connection conn, PreparedStatement ps){
 	}
 ```
 
+- Spring JDBC를 이용할 것이므로 여기서는 JDBC가 이러한 순서로 동작되는 것 위주로 이해
+- 어떻게 동작되는 것을 알아야 에러 발생시 잘 찾아낼 수 있다.
 
 
----
+
+
+
+## JDBC 실습
+
+
 

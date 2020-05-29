@@ -2,6 +2,8 @@
 <section name="Workbench">
 	<section name="MavenProjectWizardLocationPage">
 		<list key="location">
+			<item value="C:\Users\samsung\WebProject\mavenweb\src\test\java"/>
+			<item value="C:\Users\samsung\WebProject\mavenweb\pom.xml"/>
 		</list>
 		<list key="projectNameTemplate">
 			<item value="[artifactId]"/>
@@ -25,12 +27,15 @@
 	</section>
 	<section name="Maven2ProjectWizardArchifactPage">
 		<list key="package">
+			<item value="kr.or.connect.jdbcexam"/>
+			<item value="kr.or.connect"/>
 			<item value="kr.or.connect.mavenweb"/>
 		</list>
 		<list key="groupId">
 			<item value="kr.or.connect"/>
 		</list>
 		<list key="artifactId">
+			<item value="jdbcexam"/>
 			<item value="mavenweb"/>
 		</list>
 		<list key="projectNameTemplate">
