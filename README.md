@@ -1,10 +1,10 @@
 # 목차
 
-### [JSTL와 EL](#JSTL과 EL)
+### [JSTL와 EL](#jstl과-el)
 
-### [Maven](#Maven이란?)
+### [Maven](#maven이란?)
 
-### [JDBC](#JDBC(Java Database Connectivity))
+### [JDBC](#jdbc(java-database-connectivity))
 
 
 
