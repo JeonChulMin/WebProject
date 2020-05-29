@@ -1,6 +1,20 @@
+# 목차
+
+### [JSTL와 EL](#JSTL과 EL)
+
+### [Maven](#Maven이란?)
+
+### [JDBC](#JDBC(Java Database Connectivity))
+
+
+
+
+
+
+
+# JSTL과 EL
+
 JSTL(JavaServer Pages Standard Tag Library)
-
-
 
 JSTL은 태그를 통해 JSP 코드를 관리하는 라이브러리로서, 가독성을 좋게 해준다.
 
@@ -143,9 +157,7 @@ JSP 파일에 스크립틀릿 <%= %> 를 사용하는 것보다 JSTL, EL을 사�
 
 
 
-
-
-REFERENCES
+## REFERENCES
 
 - https://daesuni.github.io/jstl/
 - https://victorydntmd.tistory.com/156
@@ -153,9 +165,11 @@ REFERENCES
 
 
 
+
+
 ---
 
-Maven이란?
+# Maven이란?
 
 Maven은 개발시에 반복적으로 진행했던 작업들을 지원하기 위한 도구이다.
 
@@ -228,51 +242,59 @@ Maven을 이용할 경우 얻게 되는 이점 중 하나는 Dependency Manageme
 
 
 
+
+
 ----
 
-JDBC(Java Database Connectivity)
+# JDBC(Java Database Connectivity)
 
-자바를 이용한 DB 접속과 SQL 문장 실행, 그리고 결과로 얻어진 데이터의 핸들링을 제공하는 방법과 절차에 관한 규약
+- 자바를 이용한 DB 접속과 SQL 문장 실행, 그리고 결과로 얻어진 데이터의 핸들링을 제공하는 방법과 절차에 관한 규약
 
-자바 프로그램 내에서 SQL문을 실행하기 위한 자바 API
+- 자바 프로그램 내에서 SQL문을 실행하기 위한 자바 API
 
-JAVA는 표준 인터페이스인 JDBC API를 제공
+- JAVA는 표준 인터페이스인 JDBC API를 제공
 
 
 
-JDBC 환경 구축
+
+
+## JDBC 환경 구축
 
 - JDK 설치
-- JDBC 드라이버 설치(pom.xml에 의존성 추가)
+- JDBC 드라이버 설치(Maven(pom.xml)에 의존성 추가)
 
 ```xml
 <dependency>   
-  <groupId>mysql</groupId>   
-       <artifactId>mysql-connector-java</artifactId>
-       <version>5.1.45</version>
+	<groupId>mysql</groupId>   
+    <artifactId>mysql-connector-java</artifactId>
+    <version>5.1.45</version>
  </dependency>
 ```
 
 
 
-JDBC를 이용한 프로그래밍 순서
 
-1. import java.sql.*;
+
+## JDBC 동작 순서
+
+1. import java.sql.*; 
 2. 드라이버 로드
-3. Connection 객체를 생성
-4. Statement 객체를 생성 및 질의 수행
-5. SQL 문에 결과물이 있다면 ResultSet 객체를 생성
+3. Connection 객체를 생성 (DB에 **접속**하는 부분, connection 인터페이스)
+4. Statement 객체를 생성 및 질의 수행 (SELECT 문과 같은 쿼리문 생성하고 실행, Statement 인터페이스)
+5. SQL 문에 결과물이 있다면 ResultSet 객체를 생성 
 6. 모든 객체를 닫음
 
 
 
-JDBC 클래스의 생성 관계
+
+
+## JDBC 클래스의 생성 관계
 
 DriverManager :arrow_right: Connection :arrow_right: Statement :arrow_right: ResultSet
 
 
 
-JDBC 단계별 설명
+## JDBC 단계별 설명
 
 1. import
 
@@ -411,4 +433,8 @@ public static void close(Connection conn, PreparedStatement ps){
 		}
 	}
 ```
+
+
+
+---
 
