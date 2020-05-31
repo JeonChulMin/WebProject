@@ -28,10 +28,13 @@
 	</section>
 	<section name="Maven2ProjectWizardArchifactPage">
 		<list key="package">
+			<item value="kr.or.connect.diexam01"/>
 		</list>
 		<list key="groupId">
+			<item value="kr.or.connect"/>
 		</list>
 		<list key="artifactId">
+			<item value="diexam01"/>
 		</list>
 		<list key="projectNameTemplate">
 			<item value="[artifactId]"/>
