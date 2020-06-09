@@ -750,7 +750,7 @@ class 자동차{
 
 
 
-## XML 파일을 이용한 설정
+# XML 파일을 이용한 설정
 
 - 이클립스에서 MavenProject를 새로 생성
 - 생성 후 JDK 사용을 위해 POM.XML을 다음과 같이 수정
@@ -1024,7 +1024,7 @@ public class ApplicationContextExam01 {
 
 
 
-## DI 의존성 주입을 확인해보기
+# DI 의존성 주입을 확인해보기
 
 - 두 개의 클래스, Car, Engine 클래스를 생성
 
@@ -1141,5 +1141,5 @@ public class ApplicationContextExam02 {
 
 
 
-## Java Config를 이용한 설정
+# Java Config를 이용한 설정
 
