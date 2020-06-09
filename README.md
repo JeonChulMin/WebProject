@@ -14,9 +14,9 @@
 
 ### [XML 파일을 이용한 설정](#xml-파일을-이용한-설정하기)
 
-### [DI 의존성 주입을 확인해보기](#di-의존성-주입을-확인해보기)
+### [DI 의존성 주입을 확인](#di-의존성-주입을-확인해보기)
 
-### [Java Config를 이용한 설정](#java-config를-이용한-설정)
+### [Java Config를 이용한 설정](#java-config를-이용한-설정하기)
 
 # JSTL과 EL
 
@@ -1141,5 +1141,5 @@ public class ApplicationContextExam02 {
 
 
 
-# Java Config를 이용한 설정
+# Java Config를 이용한 설정하기
 
