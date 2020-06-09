@@ -12,6 +12,12 @@
 
 ### [Spring IoC, DI 컨테이너](#Spring-IoC와-DI-컨테이너)
 
+### [XML 파일을 이용한 설정](#XML-파일을-이용한-설정)
+
+### [DI 의존성 주입을 확인해보기](#DI-의존성-주입을-확인해보기)
+
+### [Java Config를 이용한 설정](#Java-Config를-이용한-설정)
+
 # JSTL과 EL
 
 JSTL(JavaServer Pages Standard Tag Library)
@@ -741,4 +747,399 @@ class 자동차{
   - BeanFactory의 모든 기능을 포함하며, 일반적으로 BeanFactory보다 추천된다.
   - 트랜잭션 처리, AOP 등에 대한 처리를 할 수 있다.
   - BeanPostProcessor, BeanFactoryProcessor 등을 자동으로 등록하고, 국제화 처리, 애플리케이션 이벤트 등을 처리할 수 있다.
+
+
+
+## XML 파일을 이용한 설정
+
+- 이클립스에서 MavenProject를 새로 생성
+- 생성 후 JDK 사용을 위해 POM.XML을 다음과 같이 수정
+
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>kr.or.connect</groupId>
+  <artifactId>diexam01</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>diexam01</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <spring.version> 4.3.14.RELEASE</spring.version>
+  </properties>
+
+  <dependencies>
+  
+  	<!-- Spring -->
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-context</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+  
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+    
+    <!-- USE JDK -->
+    <build>
+    <finalName>mavenweb</finalName>
+    	<plugins>
+    		<plugin>
+	    		<groupId>org.apache.maven.plugins</groupId>
+	    		<artifactId>maven-compiler-plugin</artifactId>
+	    		<version>3.6.1</version>
+	    		<configuration>
+	    			<source>1.8</source>
+	    			<target>1.8</target>
+	    		</configuration>	
+    		</plugin>
+    	</plugins>
+  </build>
+    
+</project>
+
+```
+
+- POM.XML 추가 이후에 프로젝트에 에러 표시가 난 다음, 프로젝트 우 클릭 후 Maven -> Update Project 해주기
+- 이후에 JDK 버전 확인을 휘애 프로젝트 우클릭 -> Properties -> Java Compiler 선택 후 JDK 버전 동일한 지 확인
+
+
+
+- 위 과정을 마치면 프로젝트 안에 Artifact ID로 설정한 것이 패키지로 만들어져 있고 그 안에 APP.java가 있는 것을 확인
+- 그 다음 test.java에서는 AppTest.java를 확인, AppTest은 TestCase를 상속받고 있고 junit을 이용하여 Test
+- 해당 파일을 우 클릭 후 junit 실행하면 아래에 초록색 바가 생성, Maven 프로젝트가 잘 진행되고 있다는 것을 의미
+
+
+
+- 이제 DI 테스트를 해봄, 내가 원하는 객체를 내가 생성하는 것이 아니라 Spring이 생성하여 나에게 주입시켜줌
+
+- 공장이 자동으로 만들어줄 객체가 필요, 그러한 객체를 bean이라고 한다.
+
+- UserBean이라는 클래스를 생성
+
+```java
+package kr.or.connect.diexam01;
+
+public class UserBean {
+	/* Bean 세 가지 특징을 만족해야 한다.
+	 * 1)기본생성자를 가지고 있다.
+	 * 2)필드는 private하게 선언한다.
+	 * 3)getter, setter 메소드를 가진다. getName(), setName() 메소드를 name Property라고 한다. 
+	 왜 bean은 이러한 규칙을 만족해야 할까?
+	 -> UserBean 자체를 사용자가 생성하는 것이 아닌 누군가가 대신해주기 때문에 규칙들이 있어야 하기 때문
+	 *  */
+	
+	private String name;
+	private int age;
+	private boolean male;
+	
+	public UserBean() {
+		
+	}
+	
+	public UserBean(String name, int age, boolean male) {
+		this.name = name;
+		this.age = age;
+		this.male = male;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public boolean isMale() {
+		return male;
+	}
+
+	public void setMale(boolean male) {
+		this.male = male;
+	}	
+}
+```
+
+
+
+- 그럼 이 클래스를 Spring이 가진 공장이 만들어내게끔 해야함, 컴퓨터이기 때문에 알려주어야함
+
+- 자동으로 해주는 것은 사용자가 최소한의 정보를 알려주어야함
+
+- Spring의 Bean 팩토리를 이용해서 UserBean을 생성할 것임, 그러면 Spring을 사용해야하기 때문에 Maven에다가 Spring을 추가
+
+```XML
+	<!-- Spring -->
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-context</artifactId>
+		<version>${spring.version}</version>
+	</dependency>ㅌ
+```
+
+
+
+- 그 다음 위에 properties 추가
+
+```XML
+<properties>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <spring.version> 4.3.14.RELEASE</spring.version>
+</properties>
+```
+
+- properties 안에 들어있는 것들은 상수처럼 사용할 수 있는 것들,  해당 값들이 필요할 때 값 자체로 사용하는 것이 아니라 앞에 태그 이름으로 상수처럼 사용 ex)` <version>${spring.version}</version>`
+
+- 사용하는 이유는 Spring 라이브러리가 다양하기 때문에 dependency가 많아질 텐데 해당 프로젝트에서 버전을 바꾸려할 때 일일이 찾아서 바꾸기 번거로움, 그래서 properties 안에 상수처럼 선언해두고 사용하면 유지보수하기 좋다.
+
+
+
+- 현재까지 Spring 공장 쓸거니까 라이브러리 추가함
+
+- 이제 Spring 공장한테 UserBean은 이러한 형태라고 알려주어야 한다.
+
+- 프로젝트 선택 -> new -> src/main 안에 resources 폴더 생성
+
+- resources 폴더는 java 파일과 합쳐있어도 상관은 없지만 관리하기 힘들기 때문에 불리, 이 폴더 안에는 Spring 한테 정보를 주기 위한 파일을 만들어서 관리
+
+- resources 폴더 안에 applicationContext.xml 파일 생성
+
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="userBean" class="kr.or.connect.diexam01.UserBean"></bean>
+<!-- 스프링 컨테이너한테 내가 생성할 객체를 대신 생성하게 하는 것, 반드시 정보를 주어야함, 이때 사용되는 element가 <bean> id="" class="" -->
+<!-- kr.or.connect.diexam01.UserBean userBean = new kr.or.connect.diexam01.UserBean(); 이랑 같은 의미로 보면 된다. -->
+	
+	<bean id="e" class="kr.or.connect.diexam01.Engine"/>
+	<bean id="c" class="kr.or.connect.diexam01.Car">
+		<property name="engine" ref="e"></property>
+	
+	</bean>
+
+</beans>
+```
+
+
+
+- XML 파일 인 것을 꼭 명시해주어야 되고 언어셋을 무엇을 쓸 건지 언급해줘야 한다.
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+```
+
+- root element는 반드시 beans 로 되어 있어야 한다.
+- xml schema 설정도 되어있어야 한다.
+
+```xml
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+</beans>
+```
+
+
+
+- 이제 내가 생성할 객체를 생성하게끔 해주기, 그러기 위해서는 반드시 정보를 주어야 한다.
+- bean element에  몇 가지 속성을 부여
+  - id: 생성할 객체 명
+  - class: 내가 만들고 싶은 클래스
+- 아래의 설정은 `kr.or.connect.diexam01.UserBean userBean = new kr.or.connect.diexam01.UserBean();` 와 같은 의미이다.
+
+```xml
+<bean id="userBean" class="kr.or.connect.diexam01.UserBean"></bean>
+```
+
+- Spring 컨테이너는 이런 객체를 하나만 생성해서 가지고 있다, 이를 싱글톤 패턴이라고 한다.
+
+
+
+- 이제 설정을 했으니 객체를 생성해보자, src/main/java 안에 ApplicationContextExam01.java 파일 생성
+
+```java
+package kr.or.connect.diexam01;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class ApplicationContextExam01 {
+
+	public static void main(String[] args) {
+        //Spring 공장을 만드는 코드, 여러 공장 중 ApplicationContext 공장을 사용
+		ApplicationContext ac = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+		//객체를 생성할 스프링 공장을 생성하고 xml 파일에 정보 넣어놨으니 그대로 동작하면 된다고 알려줌
+		//resources 안 xml은 자동으로 classpath로 등록됨
+		System.out.println("초기화 완료!");
+		
+        
+        //이 공장한테 얻어올 객체가 UserBean, 실제 생성은 안하고 공장한테 getBean 메소드를 이용해서 얻어낼 것, getBean은 Object 타입으로 반환해주기 때문에 형변환 필요
+		UserBean userBean = (UserBean)ac.getBean("userBean");
+		//getBean() 함수 인자로 "userBean"을 주었는데 인자는 xml 파일로 가서 이 인자와 일치하는 id를 찾아서 같이 등록되어 있는 class 명을 보고 class를 생성해서 리턴
+		userBean.setName("kim");
+		
+		System.out.println(userBean.getName());
+		
+		UserBean userBean2 = (UserBean)ac.getBean("userBean");
+		
+		if(userBean == userBean2)
+			System.out.println("같은 인스턴스");
+		//싱글톤 패턴을 이용, getBean을 통해 요청을 하더라도 계속해서 만드는 것이 아니라 하나 만든 것을 계속 이용한다
+		
+
+	}
+}
+```
+
+- ApplicationContext 인터페이스 이를 구현하는 다양한 컨테이너가 존재할 것이다.
+- XML 파일을 ClassPath에서 읽어들여서 사용하는 객체가 ClassPathXmlApplicationContext인 것 기억
+- resources 폴더가 main에 들어있는데 소스폴더이기 때문에 안에 파일들은 자동으로 ClassPath로 자동으로 등록된다. 그렇기 때문에 `classpath:applicationContext.xml` 사용 가능
+- bean들이 여러 가지 일 때, bean의 정보들을 다 읽어들여서 전부 생성해서 메모리에 올려둔다.
+- getBean의 파라미터로 bean의 id를 넣어주면 된다.
+- 이렇게 객체를 대신 생성해주고 싱글톤으로 관리해주는 기능을 IoC, 제어의 역전이라고 한다.
+
+
+
+
+
+## DI 의존성 주입을 확인해보기
+
+- 두 개의 클래스, Car, Engine 클래스를 생성
+
+#### Engine.java
+
+```java
+package kr.or.connect.diexam01;
+
+public class Engine {
+	public Engine() {
+		System.out.println("Engine 생성자");
+	}
+	
+	public void exec() {
+		System.out.println("엔진이 동작");
+	}
+}
+```
+
+#### Car.java
+
+```java
+package kr.or.connect.diexam01;
+
+public class Car {
+	private Engine v8;
+	
+	public Car() {
+		System.out.println("Car 생성자");
+	}
+
+	public void setEngine(Engine e) {
+		this.v8 = e;
+	}
+	
+	public void run() {
+		System.out.println("엔진을 이용하여 달림");
+		v8.exec();
+	}
+	
+	public static void main(String[] args) {
+		Engine e = new Engine();
+		Car c = new Car();
+		c.setEngine(e);
+		c.run();
+	}
+}
+```
+
+
+
+- 위의 main 문 과정을 제어의 역전으로 넘김, Spring IoC 컨테이너가 만들어줄 것이다.
+- Spring 컨테이너가 하게 해주려면 설정 파일에다가 해당 bean들을 등록해주어야 함
+- applicatonContext.xml 안에 bean 추가
+
+```xml
+<bean id="e" class="kr.or.connect.diexam01.Engine"></bean>
+<bean id="c" class="kr.or.connect.diexam01.Car"></bean>
+<bean id="c" class="kr.or.connect.diexam01.Car"></bean>
+```
+
+- 하지만 위 코드에서는 Engine을 set 하라는 코드가 없음
+- 아래와 같이 수정
+
+```XML
+<bean id="e" class="kr.or.connect.diexam01.Engine"></bean>
+<bean id="c" class="kr.or.connect.diexam01.Car"></bean>
+<bean id="c" class="kr.or.connect.diexam01.Car">
+	<property name="engine" ref="e"></property> get, set 메소드를 property라고 한다.
+</bean>
+```
+
+- name이 engine인 property(getEngine 혹은 setEngine) 이라는 메소드를 이야기 하고 bean 태그 안에서는 모두 값을 설정하기 때문에 setEngine이라는 메소드를 의미
+- 여기서 name은 setEngine에서 E를 소문자로 바꾼 engine을 의미
+- setEngine이라는 메소드는 파라미터는 Engine 타입을 받음
+- ref은 위에서 생성된 id가 e인 bean을 여기서 사용하겠다, 그리고 set 메소드의 파라미터를 뜻함
+
+
+
+#### ApplicationContextExam02.java
+
+```java
+package kr.or.connect.diexam01;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class ApplicationContextExam02 {
+
+	public static void main(String[] args) {
+		ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
+		
+		Car car = (Car)ac.getBean("c");
+		car.run();	
+	}
+}
+```
+
+
+
+#### 결과
+
+> Engine 생성자
+> Car 생성자
+> 엔진을 이용하여 달림
+> 엔진이 동작
+
+
+
+- 어떤 객체에게 객체를 주입하는 것을 DI라고 하고 장점은 코드를 보면 Car라는 클래스만 등장, 사용자는 사용할 Car 클래스만 알면 된다는 것을 의미, 나중에 Car를 상속받고 있는 Bus 클래스가 생성되도록 XML 파일만 수정해주면 됨
+- 실행 클래스의 코드는 바뀌지 않고 XML 파일만 수정하면 된다.
+- Spring 버전이 업데이트 되면서 XML 보다는 Annotation이나 java config를 함께 사용해 더 많이 이용됨
+- 이 방법만 하더라도 일일이 bean을 설정해줘야 하니 조금 더 편한 방법이 나오게 됨
+
+
+
+## Java Config를 이용한 설정
 

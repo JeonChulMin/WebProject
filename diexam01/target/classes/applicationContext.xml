@@ -6,4 +6,11 @@
 	<bean id="userBean" class="kr.or.connect.diexam01.UserBean"></bean>
 <!-- 스프링 컨테이너한테 내가 생성할 객체를 대신 생성하게 하는 것, 반드시 정보를 주어야함, 이때 사용되는 element가 <bean> id="" class="" -->
 <!-- kr.or.connect.diexam01.UserBean userBean = new kr.or.connect.diexam01.UserBean(); 이랑 같은 의미로 보면 된다. -->
+	
+	<bean id="e" class="kr.or.connect.diexam01.Engine"/>
+	<bean id="c" class="kr.or.connect.diexam01.Car">
+		<property name="engine" ref="e"></property>
+	
+	</bean>
+
 </beans>
